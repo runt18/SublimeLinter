@@ -20,7 +20,7 @@ from base_linter import BaseLinter
 CONFIG = {
     'language': 'pylint',
     'executable': 'pylint',
-    'lint_args': ('--reports=n', '--persistent=n', '--include-ids=y', '{filename}'),
+    'lint_args': ['--reports=n', '--persistent=n', '--include-ids=y', '{filename}'],
     'input_method': base_linter.INPUT_METHOD_FILE,
 }
 
@@ -63,6 +63,9 @@ class Linter(BaseLinter):
             elif level == 'W':
                 messages = warningMessages
                 underlines = warningUnderlines
+            else:
+                messages = errorMessages
+                underlines = errorUnderlines
 
             self.underline_range(view, lineno, col, underlines)
 
