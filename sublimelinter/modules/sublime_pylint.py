@@ -50,10 +50,14 @@ class Linter(BaseLinter):
             info = line.split(":")
             if len(info) < 3: continue
 
-            lineno = int(info[1].strip().split(',')[0])
-            col = int(info[1].strip().split(',')[1])
-            name = info[0][1:]
-            level = info[0][0]
+            try:
+                lineno = int(info[1].strip().split(',')[0])
+                col = int(info[1].strip().split(',')[1])
+                name = info[0][1:]
+                level = info[0][0]
+            except:
+                print 'failed to parse', info
+                continue
 
             if level == 'E':
                 messages = errorMessages
