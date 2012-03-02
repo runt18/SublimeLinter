@@ -22,6 +22,7 @@ CONFIG = {
     'executable': 'pylint',
     'lint_args': ['--reports=n', '--persistent=n', '--include-ids=y', '{filename}'],
     'input_method': base_linter.INPUT_METHOD_FILE,
+    'background_capable': False,
 }
 
 class Linter(BaseLinter):

@@ -608,6 +608,8 @@ class BackgroundLinter(sublime_plugin.EventListener):
 
         linter = select_linter(view)
 
+        if linter and not linter.background_capable: return
+
         # File-based linters are not invoked during a modify
         if linter and linter.input_method == INPUT_METHOD_FILE:
             erase_lint_marks(view)

@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 # base_linter.py - base class for linters
 
@@ -61,7 +62,10 @@ CONFIG = {
     'lint_args': None,
 
     # If an external executable is being used, the method used to pass input to it. Defaults to STDIN.
-    'input_method': INPUT_METHOD_STDIN
+    'input_method': INPUT_METHOD_STDIN,
+
+    # If this particular linter can run in the background, some linters are too slow to do so efficiently
+    'background_capable': True,
 }
 
 TEMPFILES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.tempfiles'))
@@ -87,6 +91,7 @@ class BaseLinter(object):
         self.enabled = False
         self.executable = config.get('executable', None)
         self.test_existence_args = config.get('test_existence_args', ('-v',))
+        self.background_capable = config.get('background_capable', True)
 
         if isinstance(self.test_existence_args, basestring):
             self.test_existence_args = (self.test_existence_args,)
