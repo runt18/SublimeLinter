@@ -285,7 +285,7 @@ def syntax_name(view):
     return syntax
 
 
-def select_linter(view, ignore_disabled=False):
+def select_linter(view, ignore_disabled=False, mode="background"):
     '''selects the appropriate linter to use based on language in current view'''
     syntax = syntax_name(view)
     lc_syntax = syntax.lower()
@@ -296,7 +296,11 @@ def select_linter(view, ignore_disabled=False):
     syntaxMap = view.settings().get('sublimelinter_syntax_map', {})
 
     if syntax in syntaxMap:
-        language = syntaxMap[syntax]
+        mode_map = syntaxMap[syntax]
+        if isinstance(mode_map, dict):
+            language = syntaxMap[syntax].get(mode)
+        else:
+            language = mode_map
 
     # then go to the default Linter setup
     if not language:
@@ -322,7 +326,6 @@ def select_linter(view, ignore_disabled=False):
                 if not enabled:
                     del LINTERS[language]
                     linter = None
-
     return linter
 
 
@@ -584,7 +587,7 @@ class LintCommand(sublime_plugin.TextCommand):
 
     def _run(self, name):
         '''runs an existing linter'''
-        self.view.settings().set('sublimelinter', False)
+        # self.view.settings().set('sublimelinter', False)
         run_once(LINTERS[name.lower()], self.view)
 
 
@@ -768,7 +771,7 @@ class SublimelinterCommand(SublimelinterWindowCommand):
                 view.run_command('lint', action)
 
     def lint_view(self, view, show_popup_list):
-        linter = select_linter(view, ignore_disabled=True)
+        linter = select_linter(view, ignore_disabled=True, mode="manual")
 
         if linter:
             view.run_command('lint', linter.language)
